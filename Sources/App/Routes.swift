@@ -6,102 +6,6 @@ import MongoKitten
 
 extension Droplet {
     func setupRoutes() throws {
-        get("hello") { req in
-            var json = JSON()
-            try json.set("hello", "world")
-            return json
-        }
-        
-        get("deleteQuotesDoc") { req in
-            
-            let config = try Config()
-            let mongoConfig = config["mongodb","server"]?.string ?? "default"
-            let db = try Database(mongoConfig)
-            
-            if db.server.isConnected {
-                let quotes = db["quotes"]
-                let _ = try quotes.remove()
-                return "success"
-            } else {
-                return "rip"
-            }
-        
-        }
-        
-        //MARK: - insert quotes
-        get("insertQuotes") {req in
-            let config = try Config()
-            let mongoConfig = config["mongodb","server"]?.string ?? "default"
-            let db = try Database(mongoConfig)
-            
-            if db.server.isConnected {
-                let quotesCollection = db["quotes"]
-                
-                let quotes = Quotes()
-                var i = 0
-                var dictionary:[String:String] = Dictionary()
-
-                for quote in quotes.jsonData {
-                    let key:String = "quote\(i)"
-
-                    dictionary.updateValue(quote, forKey: key)
-                    
-                    i += 1
-                }
-                
-                let doc = Document(dictionary)
-                
-                let result = try quotesCollection.insert(doc!)
-                return "quotes insert success, \(dictionary.count) quotes added"
-                
-            } else {
-                return "rip"
-            }
-        }
-        
-        //used to insert a test quote
-        /*get("insert") { req in
-            let config = try Config()
-            let mongoConfig = config["mongodb","server"]?.string ?? "default"
-            let db = try Database(mongoConfig)
-            
-            if db.server.isConnected {
-                let quotes = db["quotes"]
-                let doc = ["quote0":"Let your watchword be order and your beacon beauty.","quote1":"The moment clients realize that revisions are not an all-you-can-eat buffet, suddenly they realize they are not hungry."] as Document
-                let result = try quotes.insert(doc)
-                return "success"
-            } else {
-                return "rip"
-            }
-        }*/
-        
-        //MARK: - insert poems
-        get("insertPoems") {req in
-            let config = try Config()
-            let mongoConfig = config["mongodb","server"]?.string ?? "default"
-            let db = try Database(mongoConfig)
-            
-            if db.server.isConnected {
-                let poemsCollection = db["poems"]
-                
-                let poems = Poems()
-                var i = 0
-                var dictionary:[String:String] = Dictionary()
-                for poem in poems.jsonData {
-                    let key:String = "poem\(i)"
-                    dictionary.updateValue(poem, forKey: key)
-                    i += 1
-                }
-                
-                let doc = Document(dictionary)
-                
-                let result = try poemsCollection.insert(doc!)
-                return "poems insert success, poems added"
-                
-            } else {
-                return "rip"
-            }
-        }
         
         //MARK: poem + quote access endpoints
         
@@ -150,13 +54,16 @@ extension Droplet {
         }
         
         get("allQuotes") { req in
-            let config = try Config()
+            let config      = try Config()
             let mongoConfig = config["mongodb","server"]?.string ?? "default"
-            let db = try Database(mongoConfig)
+            let db          = try Database(mongoConfig)
+            
             if db.server.isConnected {
-                let quotes = db["quotes"]
+                
+                let quotes  = db["quotes"]
                 let allEntities = try quotes.find()
                 var document:Document!
+                
                 for doc in allEntities {
                     print(doc)
                     document = doc
@@ -168,8 +75,93 @@ extension Droplet {
                 return "rip"
             }
         }
+        
+        //MARK: - delete the quotes document from mongodb
+        /*get("deleteQuotesDoc") { req in
+         
+         let config = try Config()
+         let mongoConfig = config["mongodb","server"]?.string ?? "default"
+         let db = try Database(mongoConfig)
+         
+         if db.server.isConnected {
+         let quotes = db["quotes"]
+         let _ = try quotes.remove()
+         return "success"
+         } else {
+         return "rip"
+         }
+         
+         }*/
+        
+        //MARK: - insert quotes
+        /*get("insertQuotes") {req in
+         let config = try Config()
+         let mongoConfig = config["mongodb","server"]?.string ?? "default"
+         let db = try Database(mongoConfig)
+         
+         if db.server.isConnected {
+         let quotesCollection = db["quotes"]
+         
+         let quotes = Quotes()
+         var i = 0
+         var dictionary:[String:String] = Dictionary()
+         
+         for quote in quotes.jsonData {
+         let key:String = "quote\(i)"
+         
+         dictionary.updateValue(quote, forKey: key)
+         
+         i += 1
+         }
+         
+         let doc = Document(dictionary)
+         
+         let result = try quotesCollection.insert(doc!)
+         return "quotes insert success, \(dictionary.count) quotes added"
+         
+         } else {
+         return "rip"
+         }
+         }*/
+        
+        
+        //MARK: - insert poems
+        /*get("insertPoems") {req in
+         let config = try Config()
+         let mongoConfig = config["mongodb","server"]?.string ?? "default"
+         let db = try Database(mongoConfig)
+         
+         if db.server.isConnected {
+         let poemsCollection = db["poems"]
+         
+         let poems = Poems()
+         var i = 0
+         var dictionary:[String:String] = Dictionary()
+         for poem in poems.jsonData {
+         let key:String = "poem\(i)"
+         dictionary.updateValue(poem, forKey: key)
+         i += 1
+         }
+         
+         let doc = Document(dictionary)
+         
+         let result = try poemsCollection.insert(doc!)
+         return "poems insert success, poems added"
+         
+         } else {
+         return "rip"
+         }
+         }*/
+        
+        
+        //MARK: - default endpoints in the droplet extension
+        /*get("hello") { req in
+         var json = JSON()
+         try json.set("hello", "world")
+         return json
+         }*/
 
-        get("plaintext") { req in
+        /*get("plaintext") { req in
             return "Hello, world!"
         }
 
@@ -181,6 +173,6 @@ extension Droplet {
 
         get("description") { req in return req.description }
         
-        try resource("posts", PostController.self)
+        try resource("posts", PostController.self)*/
     }
 }
