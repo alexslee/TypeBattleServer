@@ -76,6 +76,23 @@ extension Droplet {
             }
         }
         
+        //MARK: - delete poems document from mongodb
+        get("deletePoemsDoc") { req in
+            
+            let config = try Config()
+            let mongoConfig = config["mongodb","server"]?.string ?? "default"
+            let db = try Database(mongoConfig)
+            
+            if db.server.isConnected {
+                let poems = db["poems"]
+                let _ = try poems.remove()
+                return "success"
+            } else {
+                return "rip"
+            }
+            
+        }
+        
         //MARK: - delete the quotes document from mongodb
         /*get("deleteQuotesDoc") { req in
          
@@ -126,32 +143,32 @@ extension Droplet {
         
         
         //MARK: - insert poems
-        /*get("insertPoems") {req in
-         let config = try Config()
-         let mongoConfig = config["mongodb","server"]?.string ?? "default"
-         let db = try Database(mongoConfig)
-         
-         if db.server.isConnected {
-         let poemsCollection = db["poems"]
-         
-         let poems = Poems()
-         var i = 0
-         var dictionary:[String:String] = Dictionary()
-         for poem in poems.jsonData {
-         let key:String = "poem\(i)"
-         dictionary.updateValue(poem, forKey: key)
-         i += 1
-         }
-         
-         let doc = Document(dictionary)
-         
-         let result = try poemsCollection.insert(doc!)
-         return "poems insert success, poems added"
-         
-         } else {
-         return "rip"
-         }
-         }*/
+        get("insertPoems") {req in
+            let config = try Config()
+            let mongoConfig = config["mongodb","server"]?.string ?? "default"
+            let db = try Database(mongoConfig)
+            
+            if db.server.isConnected {
+                let poemsCollection = db["poems"]
+                
+                let poems = Poems()
+                var i = 0
+                var dictionary:[String:String] = Dictionary()
+                for poem in poems.jsonData {
+                    let key:String = "poem\(i)"
+                    dictionary.updateValue(poem, forKey: key)
+                    i += 1
+                }
+                
+                let doc = Document(dictionary)
+                
+                let result = try poemsCollection.insert(doc!)
+                return "poems insert success, \(dictionary.count) poems added"
+                
+            } else {
+                return "rip"
+            }
+        }
         
         
         //MARK: - default endpoints in the droplet extension
