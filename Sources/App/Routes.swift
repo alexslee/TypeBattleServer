@@ -53,7 +53,7 @@ extension Droplet {
             }
         }
         
-        get("allQuotes") { req in
+        /*get("allQuotes") { req in
             let config      = try Config()
             let mongoConfig = config["mongodb","server"]?.string ?? "default"
             let db          = try Database(mongoConfig)
@@ -74,10 +74,10 @@ extension Droplet {
             } else {
                 return "rip"
             }
-        }
+        }*/
         
         //MARK: - delete poems document from mongodb
-        get("deletePoemsDoc") { req in
+        /*get("deletePoemsDoc") { req in
             
             let config = try Config()
             let mongoConfig = config["mongodb","server"]?.string ?? "default"
@@ -91,7 +91,7 @@ extension Droplet {
                 return "rip"
             }
             
-        }
+        }*/
         
         //MARK: - delete the quotes document from mongodb
         /*get("deleteQuotesDoc") { req in
@@ -143,7 +143,7 @@ extension Droplet {
         
         
         //MARK: - insert poems
-        get("insertPoems") {req in
+        /*get("insertPoems") {req in
             let config = try Config()
             let mongoConfig = config["mongodb","server"]?.string ?? "default"
             let db = try Database(mongoConfig)
@@ -168,7 +168,7 @@ extension Droplet {
             } else {
                 return "rip"
             }
-        }
+        }*/
         
         
         //MARK: - default endpoints in the droplet extension
