@@ -45,7 +45,8 @@ extension Droplet {
                 guard let key = req.parameters["number"]?.int else {return "error"}
                 let index = "quote\(key)"
                 var json = JSON()
-                try json.set("quote", document[index])
+                try json.set("quote","Honesty is the best policy, unless you work in advertising.")
+                //try json.set("quote", document[index])
                 return json
                 
             } else {
